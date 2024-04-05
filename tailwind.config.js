@@ -1,5 +1,6 @@
-/** @type {import('tailwindcss').Config} */
-const colors = require("tailwindcss/colors");
+/** @type {import('tailwindcss').Config} **/
+const { nextui } = require("@nextui-org/react");
+
 
 module.exports = {
   darkMode: ["class"],
@@ -8,14 +9,17 @@ module.exports = {
     "./components/**/*.{js,jsx}",
     "./app/**/*.{js,jsx}",
     "./src/**/*.{js,jsx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   prefix: "",
   theme: {
     colors: {
-      basic: "#64748B",
-      secondary: "#B0BFD1",
+      MainRed: "#C20E4D",
+      MainWhite: "#A1A1AA",
+      MainDarkColor: "#3F3F46",
+      DarkHoverColor:"#920B3A",
       danger: "red",
-      hoverColor: "#4D637A",
+      white: "white",
       // ...
     },
     container: {
@@ -80,7 +84,53 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      fontFamily: {
+        Fonlog: ["Fonlog", "Roboto"],
+      },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  darkMode: "class",
+  plugins: [
+    nextui({
+      themes: {
+        "purple-dark": {
+          extend: "dark", // <- inherit default values from dark theme
+          colors: {
+            background: "#0D001A",
+            foreground: "#ffffff",
+            primary: {
+              50: "#F2EAFA",
+              100: "#520F83",
+              200: "#7318A2",
+              300: "#9823C2",
+              400: "#c031e2",
+              500: "#DD62ED",
+              600: "#F182F6",
+              700: "#FCADF9",
+              800: "#FDD5F9",
+              900: "#FEECFE",
+              DEFAULT: "#DD62ED",
+              foreground: "#ffffff",
+            },
+            focus: "#F182F6",
+          },
+          layout: {
+            disabledOpacity: "0.3",
+            radius: {
+              small: "4px",
+              medium: "6px",
+              large: "8px",
+            },
+            borderWidth: {
+              small: "1px",
+              medium: "2px",
+              large: "3px",
+            },
+          },
+        },
+      },
+    }),
+    require("tailwindcss-animate"),
+    nextui(),
+  ],
 };

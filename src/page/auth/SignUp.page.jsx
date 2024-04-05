@@ -1,33 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
+import { Card, CardBody } from "@nextui-org/react";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { FaUser, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import { Loader2 } from "lucide-react";
+import { Spinner } from "@nextui-org/react";
 import { useSignUpMutation } from "../../store/service/endpoint/auth.endpoint";
-
+import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
-
   const [registerFun, data] = useSignUpMutation();
+  const { toast } = useToast();
+  const nav = useNavigate();
 
   const initialValues = {
     name: "",
     email: "",
     password: "",
-    confirm_password: "",
+    password_confirmation: "",
   };
 
   const validationSchema = yup.object({
@@ -43,7 +39,7 @@ const SignUp = () => {
       .string()
       .required("Password is required")
       .min(8, "Password must be at least 8 characters"),
-    confirm_password: yup
+    password_confirmation: yup
       .string()
       .required("Confirm Password is required")
       .oneOf(
@@ -53,17 +49,33 @@ const SignUp = () => {
   });
 
   const handleSubmit = async (value) => {
-    console.log(value);
-    await registerFun(value)
-
+    await registerFun(value);
   };
+
+  useEffect(() => {
+    console.log(data);
+    if (data.error) {
+      toast({
+        title: "Auth Error from Server",
+        description: data.error.data.message,
+      });
+    } else if (data.data) {
+      nav("/");
+    }
+  }, [data]);
+
   return (
-    <div className=" w-3/5 mx-auto flex justify-center items-center h-full ">
-      <Card className="w-[350px] border-none shadow-md bg-secondary py-3">
-        <CardHeader>
-          <CardTitle className=" text-basic">Create your Account</CardTitle>
-        </CardHeader>
-        <CardContent>
+    <div className=" w-full mx-auto flex justify-center items-center h-full">
+      <Card
+        isBlurred
+        className="border-none bg-background/60 dark:bg-default-100/50 w-[25%] max-w-[600] p-5"
+        shadow="sm"
+      >
+        <CardBody>
+          <CardTitle className=" dark:text-MainWhite text-MainDarkColor mb-8 text-center">
+            Login to your Account
+            <div className="h-1 w-40 flex justify-center mx-auto mt-3 bg-MainRed"></div>
+          </CardTitle>
           <Formik
             initialValues={initialValues}
             onSubmit={handleSubmit}
@@ -84,7 +96,7 @@ const SignUp = () => {
                           placeholder="Username..."
                           className=" rounded-full"
                         />
-                        <FaUser className=" absolute right-4 text-basic" />
+                        <FaUser className=" absolute right-4 text-MainWhite" />
                       </div>
                       <ErrorMessage
                         className=" text-danger font-light text-sm ms-3"
@@ -103,7 +115,7 @@ const SignUp = () => {
                           placeholder="Email..."
                           className=" rounded-full"
                         />
-                        <MdEmail className=" absolute right-4 text-basic" />
+                        <MdEmail className=" absolute right-4 text-MainWhite" />
                       </div>
                       <ErrorMessage
                         className=" text-danger font-light text-sm ms-3"
@@ -122,7 +134,7 @@ const SignUp = () => {
                           placeholder="Create Password..."
                           className=" rounded-full"
                         />
-                        <FaLock className=" absolute right-4 text-basic text-sm" />
+                        <FaLock className=" absolute right-4 text-MainWhite text-sm" />
                       </div>
                       <ErrorMessage
                         className=" text-danger font-light text-sm ms-3"
@@ -135,18 +147,18 @@ const SignUp = () => {
                         <Input
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          value={values.confirm_password}
+                          value={values.password_confirmation}
                           type="password"
-                          id="confirm_password"
+                          id="password_confirmation"
                           placeholder="Confirm Password..."
                           className=" rounded-full"
                         />
-                        <FaLock className=" absolute right-4 text-basic text-sm" />
+                        <FaLock className=" absolute right-4 text-MainWhite text-sm" />
                       </div>
 
                       <ErrorMessage
                         className=" text-danger font-light text-sm ms-3"
-                        name="confirm_password"
+                        name="password_confirmation"
                         component="div"
                       />
                     </div>
@@ -154,12 +166,15 @@ const SignUp = () => {
                       <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className=" bg-basic w-full hover:bg-hoverColor rounded-full"
+                        className=" bg-MainRed text-white w-full hover:bg-DarkHoverColor rounded-full"
                       >
                         {isSubmitting && (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          <Spinner
+                            color="warning"
+                            size="sm"
+                            className=" me-2"
+                          />
                         )}
-
                         Register
                       </Button>
                     </div>
@@ -168,7 +183,7 @@ const SignUp = () => {
               </>
             )}
           </Formik>
-        </CardContent>
+        </CardBody>
         <CardFooter className="flex flex-col">
           <CardDescription>
             Already have an account?

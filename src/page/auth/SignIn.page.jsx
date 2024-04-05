@@ -1,14 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
+import { Card, CardBody } from "@nextui-org/react";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Formik, Form, ErrorMessage } from "formik";
@@ -16,14 +11,12 @@ import * as yup from "yup";
 import { FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { useSignInMutation } from "../../store/service/endpoint/auth.endpoint";
-import { Loader2 } from "lucide-react";
-
+import { Spinner } from "@nextui-org/react";
 
 const SignInPage = () => {
-
   const [loginFun, data] = useSignInMutation();
 
-  console.log(loginFun,data)
+  console.log(loginFun, data);
 
   const initialValues = {
     email: "",
@@ -41,17 +34,22 @@ const SignInPage = () => {
       .min(8, "Password must be at least 8 characters"),
   });
 
-  const handleSubmit = async (value) => {
-    console.log(value);
-    await loginFun(value)
+  const handleSubmit = async (value, action) => {
+    await loginFun(value);
+    action.reset();
   };
   return (
-    <div className=" w-3/5 mx-auto flex justify-center items-center h-full">
-      <Card className="w-[350px] border-none  shadow-md bg-secondary py-3">
-        <CardHeader>
-          <CardTitle className=" text-basic">Login to your Account</CardTitle>
-        </CardHeader>
-        <CardContent>
+    <div className=" w-full mx-auto flex justify-center items-center h-full">
+      <Card
+        isBlurred
+        className="border-none bg-background/60 dark:bg-default-100/50 w-[25%] max-w-[600] p-5"
+        shadow="sm"
+      >
+        <CardBody>
+          <CardTitle className=" mb-8 text-center dark:text-MainWhite text-MainDarkColor">
+            Login to your Account
+            <div className="h-1 w-40 bg-MainRed flex justify-center mx-auto mt-3"></div>
+          </CardTitle>
           <Formik
             initialValues={initialValues}
             onSubmit={handleSubmit}
@@ -61,7 +59,7 @@ const SignInPage = () => {
               <>
                 <Form>
                   <div className="grid w-full items-center gap-4">
-                    <div className="flex flex-col space-y-1.5">
+                    <div className="flex flex-col space-y-1.5 text-MainWhite">
                       <div className="relative flex justify-between items-center rounded-full">
                         <Input
                           onChange={handleChange}
@@ -71,7 +69,7 @@ const SignInPage = () => {
                           placeholder="Email..."
                           className=" rounded-full"
                         />
-                        <MdEmail className=" absolute right-4 text-basic text-sm" />
+                        <MdEmail className=" absolute right-4 text-MainWhite text-sm" />
                       </div>
 
                       <ErrorMessage
@@ -91,7 +89,7 @@ const SignInPage = () => {
                           placeholder="Password..."
                           className=" rounded-full"
                         />
-                        <FaLock className=" absolute right-4 text-basic text-sm" />
+                        <FaLock className=" absolute right-4 text-MainWhite text-sm" />
                       </div>
                       <ErrorMessage
                         className=" text-danger font-light text-sm"
@@ -103,10 +101,14 @@ const SignInPage = () => {
                       <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className=" bg-basic w-full hover:bg-hoverColor rounded-full"
+                        className=" bg-MainRed text-white w-full hover:bg-DarkHoverColor rounded-full"
                       >
                         {isSubmitting && (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          <Spinner
+                            color="warning"
+                            size="sm"
+                            className=" me-2"
+                          />
                         )}
                         Login
                       </Button>
@@ -116,9 +118,9 @@ const SignInPage = () => {
               </>
             )}
           </Formik>
-        </CardContent>
+        </CardBody>
         <CardFooter className="flex flex-col">
-          <CardDescription>
+          <CardDescription className="">
             Don't have an account?
             <span className=" underline text-basic font-bold">
               {" "}
