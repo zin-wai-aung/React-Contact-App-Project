@@ -15,9 +15,9 @@ module.exports = {
   theme: {
     colors: {
       MainRed: "#C20E4D",
-      MainWhite: "#A1A1AA",
+      MainWhite: "#94A3B8",
       MainDarkColor: "#3F3F46",
-      DarkHoverColor:"#920B3A",
+      DarkHoverColor: "#D3135D",
       danger: "red",
       white: "white",
       // ...

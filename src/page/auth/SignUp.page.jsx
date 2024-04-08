@@ -4,7 +4,7 @@ import { CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
 import { Card, CardBody } from "@nextui-org/react";
 
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button } from "@nextui-org/react";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { FaUser, FaLock } from "react-icons/fa";
@@ -74,7 +74,11 @@ const SignUp = () => {
         <CardBody>
           <CardTitle className=" dark:text-MainWhite text-MainDarkColor mb-8 text-center">
             Login to your Account
-            <div className="h-1 w-40 flex justify-center mx-auto mt-3 bg-MainRed"></div>
+            <Button
+              variant="shadow"
+              color="danger"
+              className="h-1 w-40 flex justify-center mx-auto mt-3"
+            ></Button>
           </CardTitle>
           <Formik
             initialValues={initialValues}
@@ -164,9 +168,10 @@ const SignUp = () => {
                     </div>
                     <div className="flex flex-col space-y-1.5 mt-5">
                       <Button
+                        color="danger"
                         type="submit"
                         disabled={isSubmitting}
-                        className=" bg-MainRed text-white w-full hover:bg-DarkHoverColor rounded-full"
+                        className=" text-white w-full hover:bg-DarkHoverColor rounded-full"
                       >
                         {isSubmitting && (
                           <Spinner

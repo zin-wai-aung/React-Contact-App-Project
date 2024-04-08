@@ -15,17 +15,16 @@ import SwitchTheme from "../../ui/theme/SwitchTheme";
 const navBar = () => {
 
   return (
-    <div className=" container">
-      <Navbar className=" container flex items-center">
+      <Navbar shouldHideOnScroll className=" pt-5">
         <NavbarBrand>
           <p className="text-inherit font-Fonlog text-[2rem] flex flex-col items-start">
             <span className=" text-danger">Contact</span>
-            <span className=" dark:text-white text-MainDarkColor leading-8 tracking-widest">
+            <span className=" dark:text-MainWhite text-MainDarkColor leading-8 tracking-widest">
               APP
             </span>
           </p>
         </NavbarBrand>
-        <NavbarContent justify="end">
+        <NavbarContent justify="end" >
           <NavbarItem>
             <SwitchTheme />
           </NavbarItem>
@@ -54,7 +53,6 @@ const navBar = () => {
           </NavbarItem>
         </NavbarContent>
       </Navbar>
-    </div>
   );
 };
 
