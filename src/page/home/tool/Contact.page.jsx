@@ -44,7 +44,7 @@ const Contact = () => {
 
       {/* contact data lists */}
       <div className=" mx-auto w-[75%] mt-5 dark:text-MainWhite text-MainDarkColor">
-        {!datalists ? <NoData /> : <DataTablePage datalists={datalists} />}
+        {!datalists?.length>0 ? <NoData /> : <DataTablePage datalists={datalists} />}
       </div>
 
       <SheetContent className=" bg-MainWhite m-0">

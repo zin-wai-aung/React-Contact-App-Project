@@ -43,7 +43,6 @@ const FormTool = () => {
   };
   
   useEffect(() => {
-    console.log(data,isError,isLoading)
     
   },[data,isError,isLoading])
 
