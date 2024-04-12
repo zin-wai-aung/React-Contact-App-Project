@@ -46,7 +46,7 @@ const SignInPage = () => {
 
   return (
     <AuthGuard check={data?.data?.success} token={data?.data?.token}>
-      <div className=" w-full mx-auto flex justify-center items-center h-full">
+      <div className=" w-full h-screen mx-auto flex justify-center items-center">
         <Card
           isBlurred
           className="border-none bg-background/60 dark:bg-default-100/50 w-[25%] max-w-[600] p-5"

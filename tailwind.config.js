@@ -18,6 +18,8 @@ module.exports = {
       MainWhite: "#94A3B8",
       MainDarkColor: "#3F3F46",
       DarkHoverColor: "#D3135D",
+      FormColor: "#dee8f7",
+      patternBg:"##131824",
       danger: "red",
       white: "white",
       // ...
@@ -86,6 +88,9 @@ module.exports = {
       },
       fontFamily: {
         Fonlog: ["Fonlog", "Roboto"],
+      },
+      backgroundImage: {
+        "hero-pattern": "url('assets/pattern.svg')",
       },
     },
   },

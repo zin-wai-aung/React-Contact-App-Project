@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
 import { Card, CardBody } from "@nextui-org/react";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@nextui-org/react";
 import { Formik, Form, ErrorMessage } from "formik";
@@ -13,11 +12,14 @@ import { Spinner } from "@nextui-org/react";
 import { useSignUpMutation } from "../../store/service/endpoint/auth.endpoint";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import AuthGuard from "../../components/guard/Auth.guard";
 
 const SignUp = () => {
   const [registerFun, data] = useSignUpMutation();
   const { toast } = useToast();
   const nav = useNavigate();
+
+  // console.log(data)
 
   const initialValues = {
     name: "",
@@ -53,153 +55,154 @@ const SignUp = () => {
   };
 
   useEffect(() => {
-    console.log(data);
-    if (data.error) {
+    if (data?.error) {
       toast({
         title: "Auth Error from Server",
         description: data.error.data.message,
       });
-    } else if (data.data) {
-      nav("/");
+    } else if (data?.data) {
+      nav("/home");
     }
   }, [data]);
 
   return (
-    <div className=" w-full mx-auto flex justify-center items-center h-full">
-      <Card
-        isBlurred
-        className="border-none bg-background/60 dark:bg-default-100/50 w-[25%] max-w-[600] p-5"
-        shadow="sm"
-      >
-        <CardBody>
-          <CardTitle className=" dark:text-MainWhite text-MainDarkColor mb-8 text-center">
-            Login to your Account
-            <Button
-              variant="shadow"
-              color="danger"
-              className="h-1 w-40 flex justify-center mx-auto mt-3"
-            ></Button>
-          </CardTitle>
-          <Formik
-            initialValues={initialValues}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
-          >
-            {({ values, handleChange, handleBlur, isSubmitting }) => (
-              <>
-                <Form>
-                  <div className="grid w-full items-center gap-4">
-                    <div className="flex flex-col space-y-1.5">
-                      <div className=" relative flex justify-between items-center rounded-full">
-                        <Input
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.name}
-                          type="text"
-                          id="name"
-                          placeholder="Username..."
-                          className=" rounded-full"
-                        />
-                        <FaUser className=" absolute right-4 text-MainWhite" />
-                      </div>
-                      <ErrorMessage
-                        className=" text-danger font-light text-sm ms-3"
-                        name="name"
-                        component="div"
-                      />
-                    </div>
-                    <div className="flex flex-col space-y-1.5">
-                      <div className="relative flex justify-between items-center rounded-full">
-                        <Input
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.email}
-                          type="email"
-                          id="email"
-                          placeholder="Email..."
-                          className=" rounded-full"
-                        />
-                        <MdEmail className=" absolute right-4 text-MainWhite" />
-                      </div>
-                      <ErrorMessage
-                        className=" text-danger font-light text-sm ms-3"
-                        name="email"
-                        component="div"
-                      />
-                    </div>
-                    <div className="flex flex-col space-y-1.5">
-                      <div className="relative flex justify-between items-center rounded-full">
-                        <Input
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.password}
-                          type="password"
-                          id="password"
-                          placeholder="Create Password..."
-                          className=" rounded-full"
-                        />
-                        <FaLock className=" absolute right-4 text-MainWhite text-sm" />
-                      </div>
-                      <ErrorMessage
-                        className=" text-danger font-light text-sm ms-3"
-                        name="password"
-                        component="p"
-                      />
-                    </div>
-                    <div className="flex flex-col space-y-1.5">
-                      <div className="relative flex justify-between items-center rounded-full">
-                        <Input
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.password_confirmation}
-                          type="password"
-                          id="password_confirmation"
-                          placeholder="Confirm Password..."
-                          className=" rounded-full"
-                        />
-                        <FaLock className=" absolute right-4 text-MainWhite text-sm" />
-                      </div>
-
-                      <ErrorMessage
-                        className=" text-danger font-light text-sm ms-3"
-                        name="password_confirmation"
-                        component="div"
-                      />
-                    </div>
-                    <div className="flex flex-col space-y-1.5 mt-5">
-                      <Button
-                        color="danger"
-                        type="submit"
-                        disabled={isSubmitting}
-                        className=" text-white w-full hover:bg-DarkHoverColor rounded-full"
-                      >
-                        {isSubmitting && (
-                          <Spinner
-                            color="warning"
-                            size="sm"
-                            className=" me-2"
+    <AuthGuard check={data?.data?.success} token={data?.data?.token}>
+      <div className=" w-full h-screen mx-auto flex justify-center items-center">
+        <Card
+          isBlurred
+          className="border-none bg-background/60 dark:bg-default-100/50 w-[25%] max-w-[600] p-5"
+          shadow="sm"
+        >
+          <CardBody>
+            <CardTitle className=" dark:text-MainWhite text-MainDarkColor mb-8 text-center">
+              Login to your Account
+              <Button
+                variant="shadow"
+                color="danger"
+                className="h-1 w-40 flex justify-center mx-auto mt-3"
+              ></Button>
+            </CardTitle>
+            <Formik
+              initialValues={initialValues}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              {({ values, handleChange, handleBlur, isSubmitting }) => (
+                <>
+                  <Form>
+                    <div className="grid w-full items-center gap-4">
+                      <div className="flex flex-col space-y-1.5">
+                        <div className=" relative flex justify-between items-center rounded-full">
+                          <Input
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.name}
+                            type="text"
+                            id="name"
+                            placeholder="Username..."
+                            className=" rounded-full"
                           />
-                        )}
-                        Register
-                      </Button>
+                          <FaUser className=" absolute right-4 text-MainWhite" />
+                        </div>
+                        <ErrorMessage
+                          className=" text-danger font-light text-sm ms-3"
+                          name="name"
+                          component="div"
+                        />
+                      </div>
+                      <div className="flex flex-col space-y-1.5">
+                        <div className="relative flex justify-between items-center rounded-full">
+                          <Input
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.email}
+                            type="email"
+                            id="email"
+                            placeholder="Email..."
+                            className=" rounded-full"
+                          />
+                          <MdEmail className=" absolute right-4 text-MainWhite" />
+                        </div>
+                        <ErrorMessage
+                          className=" text-danger font-light text-sm ms-3"
+                          name="email"
+                          component="div"
+                        />
+                      </div>
+                      <div className="flex flex-col space-y-1.5">
+                        <div className="relative flex justify-between items-center rounded-full">
+                          <Input
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.password}
+                            type="password"
+                            id="password"
+                            placeholder="Create Password..."
+                            className=" rounded-full"
+                          />
+                          <FaLock className=" absolute right-4 text-MainWhite text-sm" />
+                        </div>
+                        <ErrorMessage
+                          className=" text-danger font-light text-sm ms-3"
+                          name="password"
+                          component="p"
+                        />
+                      </div>
+                      <div className="flex flex-col space-y-1.5">
+                        <div className="relative flex justify-between items-center rounded-full">
+                          <Input
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.password_confirmation}
+                            type="password"
+                            id="password_confirmation"
+                            placeholder="Confirm Password..."
+                            className=" rounded-full"
+                          />
+                          <FaLock className=" absolute right-4 text-MainWhite text-sm" />
+                        </div>
+
+                        <ErrorMessage
+                          className=" text-danger font-light text-sm ms-3"
+                          name="password_confirmation"
+                          component="div"
+                        />
+                      </div>
+                      <div className="flex flex-col space-y-1.5 mt-5">
+                        <Button
+                          color="danger"
+                          type="submit"
+                          disabled={isSubmitting}
+                          className=" text-white w-full hover:bg-DarkHoverColor rounded-full"
+                        >
+                          {isSubmitting && (
+                            <Spinner
+                              color="warning"
+                              size="sm"
+                              className=" me-2"
+                            />
+                          )}
+                          Register
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </Form>
-              </>
-            )}
-          </Formik>
-        </CardBody>
-        <CardFooter className="flex flex-col">
-          <CardDescription>
-            Already have an account?
-            <span className=" underline text-basic font-bold">
-              {" "}
-              <Link to={"/"}> Login </Link>{" "}
-            </span>
-          </CardDescription>
-        </CardFooter>
-      </Card>
-    </div>
+                  </Form>
+                </>
+              )}
+            </Formik>
+          </CardBody>
+          <CardFooter className="flex flex-col">
+            <CardDescription>
+              Already have an account?
+              <span className=" underline text-basic font-bold">
+                {" "}
+                <Link to={"/"}> Login </Link>{" "}
+              </span>
+            </CardDescription>
+          </CardFooter>
+        </Card>
+      </div>
+    </AuthGuard>
   );
 };
 

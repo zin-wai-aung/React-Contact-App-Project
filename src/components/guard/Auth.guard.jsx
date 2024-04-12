@@ -8,9 +8,7 @@ const AuthGuard = ({ check, token, children }) => {
   const nav = useNavigate();
   
   const { data, isError, isLoading } = useProfileQuery();
-  
-  console.log(data,isError,isLoading)
-  
+    
   useEffect(() => {
     if (check) {
       localStorage.setItem("token", JSON.stringify(token));

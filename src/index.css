@@ -77,4 +77,8 @@
     font-weight: 600;
     src: url(./assets//font/FONLOG.ttf) format("ttf");
   }
+  input {
+  --tw-ring-shadow: 0 0 #000 !important;
+  @apply ring-offset-0 ring-0
+}
 }
