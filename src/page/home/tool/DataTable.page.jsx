@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const DataTablePage = ({ datalists, handleEdit }) => {
+const DataTablePage = ({ datalists, handleEdit,filterContact }) => {
   
   return (
     <Table>
@@ -32,11 +32,17 @@ const DataTablePage = ({ datalists, handleEdit }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {datalists.map((data) => (
-          <TableRow key={data.id} className=" cursor-pointer">
-            <DataPage singleData={data} handleEdit={handleEdit} />
-          </TableRow>
-        ))}
+        {filterContact.length>0
+          ? filterContact.map((data) => (
+              <TableRow key={data.id} className=" cursor-pointer">
+                <DataPage singleData={data} handleEdit={handleEdit} />
+              </TableRow>
+            ))
+          : datalists.map((data) => (
+              <TableRow key={data.id} className=" cursor-pointer">
+                <DataPage singleData={data} handleEdit={handleEdit} />
+              </TableRow>
+            ))}
       </TableBody>
     </Table>
   );

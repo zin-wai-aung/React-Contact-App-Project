@@ -15,18 +15,32 @@ import { useGetcontactQuery } from "../../../store/service/endpoint/contact.endp
 
 const Contact = () => {
   const { data } = useGetcontactQuery();
-  const [editData,setEditData] = useState({edit:false,data:null})
+  const [editData, setEditData] = useState({ edit: false, data: null });
+  const [searchContact, setSearchContact] = useState("");
 
   const datalists = data?.contacts?.data;
 
   const handleEdit = (id) => {
     const finder = datalists.find((data) => data.id === id);
-    setEditData({edit:true,data:finder})
+    setEditData({ edit: true, data: finder });
   };
 
   const handleClose = () => {
-    setEditData({edit:false,data:null})
-  }
+    setEditData({ edit: false, data: null });
+  };
+
+  const filterContact = datalists?.filter((contact) => {
+    return (
+      contact.name.toLowerCase().includes(searchContact.toLocaleLowerCase()) ||
+      contact.email.toLowerCase().includes(searchContact.toLocaleLowerCase()) ||
+      contact.address.toLowerCase().includes(searchContact.toLocaleLowerCase())
+    );
+  });
+
+  const handleChange = (e) => {
+    setSearchContact(e.target.value);
+  };
+
   return (
     <>
       <div className=" w-[75%] mx-auto mt-5">
@@ -44,8 +58,8 @@ const Contact = () => {
           <div className="relative flex justify-between items-center rounded-full">
             <FaSearch className=" absolute text-MainDarkColor dark:text-MainWhite   left-4 text-sm" />
             <Input
-              id="email"
               placeholder="Search Contact..."
+              onChange={handleChange}
               className=" rounded-xl border-3 py-4 shadow ps-10 border-MainDarkColor text-MainDarkColor"
             />
           </div>
@@ -54,10 +68,22 @@ const Contact = () => {
 
       {/* contact data lists */}
       <div className=" mx-auto w-[75%] mt-5 dark:text-MainWhite text-MainDarkColor">
-        {!datalists?.length>0 ? <NoData /> : <DataTablePage handleEdit={handleEdit} datalists={datalists} />}
+        {!datalists?.length > 0 ? (
+          <NoData />
+        ) : (
+          <DataTablePage
+            datalists={datalists}
+            handleEdit={handleEdit}
+            filterContact={filterContact}
+          />
+        )}
       </div>
 
-      <SheetContent onClose={handleClose} onOverlayClick={handleClose} className=" bg-MainWhite m-0">
+      <SheetContent
+        onClose={handleClose}
+        onOverlayClick={handleClose}
+        className=" bg-MainWhite m-0"
+      >
         <SheetHeader>
           <SheetTitle>Contact information</SheetTitle>
           <FormTool editData={editData} handleClose={handleClose} />
