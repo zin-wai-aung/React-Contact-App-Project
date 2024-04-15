@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const DataTablePage = ({ datalists }) => {
+const DataTablePage = ({ datalists, handleEdit }) => {
   
   return (
     <Table>
@@ -34,7 +34,7 @@ const DataTablePage = ({ datalists }) => {
       <TableBody>
         {datalists.map((data) => (
           <TableRow key={data.id} className=" cursor-pointer">
-            <DataPage singleData={data} />
+            <DataPage singleData={data} handleEdit={handleEdit} />
           </TableRow>
         ))}
       </TableBody>

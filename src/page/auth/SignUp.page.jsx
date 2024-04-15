@@ -60,13 +60,13 @@ const SignUp = () => {
         title: "Auth Error from Server",
         description: data.error.data.message,
       });
-    } else if (data?.data) {
+    } else if (data?.data?.success) {
       nav("/home");
     }
   }, [data]);
 
   return (
-    <AuthGuard check={data?.data?.success} token={data?.data?.token}>
+    <AuthGuard path="/sign_up">
       <div className=" w-full h-screen mx-auto flex justify-center items-center">
         <Card
           isBlurred

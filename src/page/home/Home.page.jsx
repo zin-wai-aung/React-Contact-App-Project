@@ -8,7 +8,7 @@ const HomePage = () => {
   const { data } = useGetcontactQuery();
 
   return (
-    <AuthGuard check={data?.data?.success} token={data?.data?.token}>
+    <AuthGuard>
       <Sheet className=" bg-MainWhite m-0 p-0">
         <div className=" w-full h-full">
           <Navbar />

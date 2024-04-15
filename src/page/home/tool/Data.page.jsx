@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { TableCell } from "@/components/ui/table";
 import { FaUserEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -15,45 +15,34 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { useDeletecontactMutation } from "../../../store/service/endpoint/contact.endpoint";
-import Swal from "sweetalert2";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { SheetTrigger } from "@/components/ui/sheet";
 
-const DataPage = ({ singleData }) => {
-  const nav = useNavigate();
+const DataPage = ({ singleData, handleEdit }) => {
+  const { toast } = useToast();
+
   const [deleteFun, { data, isError, isLoading }] = useDeletecontactMutation();
   let uniqueId = singleData.id;
 
-  useEffect(() => {
-    // console.log(data);
-  }, [data, isError, isLoading]);
+  const confirmDel = async () => {
+    await deleteFun(uniqueId);
 
-  const confirmDel = () => {
-    deleteFun(uniqueId);
-
-    // toast({
-    //   color: "#94A3B8",
-    //   description: "Successfully have been deleted.",
-    // });
-
-    Swal.fire({
-      color: "#3F3F46",
-      title: "Deleted!",
-      text: "Your file has been deleted.",
-      icon: "success",
-      confirmButtonColor: "#C20E4D",
+    toast({
+      color: "#94A3B8",
+      description: "Successfully have been deleted.",
     });
   };
 
   return (
     <>
       <TableCell className="font-medium text-nowrap">
-       {singleData.name}
+        {singleData.name}
       </TableCell>
       <TableCell className=" text-nowrap text-right">
         {singleData.phone}
@@ -67,8 +56,7 @@ const DataPage = ({ singleData }) => {
               <Tooltip>
                 <TooltipTrigger>
                   <Link to={`contact/${singleData.id}`}>
-                  <TiInfoLarge className=" text-2xl" />
-                  
+                    <TiInfoLarge className=" text-2xl" />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -81,7 +69,11 @@ const DataPage = ({ singleData }) => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <FaUserEdit />
+                  <SheetTrigger>
+                    <button onClick={handleEdit.bind(null, singleData.id)}>
+                      <FaUserEdit />
+                    </button>
+                  </SheetTrigger>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Edit Contact</p>
@@ -122,7 +114,6 @@ const DataPage = ({ singleData }) => {
           </div>
         </div>
       </TableCell>
-      
     </>
   );
 };

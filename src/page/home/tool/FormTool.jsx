@@ -1,26 +1,30 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@nextui-org/react";
-import { useCreatecontactMutation } from '../../../store/service/endpoint/contact.endpoint';
 import {
-  SheetClose,
-} from "@/components/ui/sheet";
+  useCreatecontactMutation,
+  useUpdatecontactMutation,
+} from "../../../store/service/endpoint/contact.endpoint";
+import { SheetClose } from "@/components/ui/sheet";
+import { useToast } from "@/components/ui/use-toast";
 
-const FormTool = () => {
+const FormTool = ({ editData, handleClose }) => {
+  const { toast } = useToast();
 
-  const [createContactFun, { data, isError, isLoading }] = useCreatecontactMutation();
-  
+  const [addFun, { data, isError, isLoading }] = useCreatecontactMutation();
+  const [updateFun, apiData] = useUpdatecontactMutation();
+
   const closeRef = useRef();
 
   const initialValues = {
-    name: "",
-    phone: "",
-    email: "",
-    address: "",
+    name: editData?.data?.name || "",
+    phone: editData?.data?.phone || "",
+    email: editData?.data?.email || "",
+    address: editData?.data?.address || "",
   };
 
   const validationSchema = yup.object({
@@ -38,14 +42,18 @@ const FormTool = () => {
   });
 
   const handleSubmit = async (value) => {
-    await createContactFun(value);
+    if (editData.edit) {
+      await updateFun({ id: editData.data?.id, ...value });
+
+      toast({
+        color: "#94A3B8",
+        description: "Successfully Updated.",
+      });
+    } else {
+      await addFun(value);
+    }
     closeRef.current.click();
   };
-  
-  useEffect(() => {
-    
-  },[data,isError,isLoading])
-
 
   return (
     <div className="w-full h-full mt-5">
@@ -136,6 +144,8 @@ const FormTool = () => {
                   <div className=" flex items-center mt-5 space-x-5">
                     <SheetClose ref={closeRef}>
                       <Button
+                        type="button"
+                        onClick={handleClose}
                         className=" text-white w-full bg-MainDarkColor bg-opacity-40 hover:bg-MainDarkColor rounded-lg ms-2"
                       >
                         Cancel
@@ -149,7 +159,7 @@ const FormTool = () => {
                       {isSubmitting && (
                         <Spinner color="warning" size="sm" className=" me-2" />
                       )}
-                      Create Contact
+                      {editData.edit ? "Update Contact" : "Create Contact"}
                     </Button>
                   </div>
                 </div>
@@ -160,6 +170,6 @@ const FormTool = () => {
       </Formik>
     </div>
   );
-}
+};
 
-export default FormTool
+export default FormTool;

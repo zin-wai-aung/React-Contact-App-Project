@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import NoData from "../../../components/lottieComponent/NoData";
 import DataTablePage from "./DataTable.page";
 import FormTool from "./FormTool";
@@ -15,8 +15,18 @@ import { useGetcontactQuery } from "../../../store/service/endpoint/contact.endp
 
 const Contact = () => {
   const { data } = useGetcontactQuery();
+  const [editData,setEditData] = useState({edit:false,data:null})
 
   const datalists = data?.contacts?.data;
+
+  const handleEdit = (id) => {
+    const finder = datalists.find((data) => data.id === id);
+    setEditData({edit:true,data:finder})
+  };
+
+  const handleClose = () => {
+    setEditData({edit:false,data:null})
+  }
   return (
     <>
       <div className=" w-[75%] mx-auto mt-5">
@@ -44,13 +54,13 @@ const Contact = () => {
 
       {/* contact data lists */}
       <div className=" mx-auto w-[75%] mt-5 dark:text-MainWhite text-MainDarkColor">
-        {!datalists?.length>0 ? <NoData /> : <DataTablePage datalists={datalists} />}
+        {!datalists?.length>0 ? <NoData /> : <DataTablePage handleEdit={handleEdit} datalists={datalists} />}
       </div>
 
-      <SheetContent className=" bg-MainWhite m-0">
+      <SheetContent onClose={handleClose} onOverlayClick={handleClose} className=" bg-MainWhite m-0">
         <SheetHeader>
           <SheetTitle>Contact information</SheetTitle>
-          <FormTool />
+          <FormTool editData={editData} handleClose={handleClose} />
         </SheetHeader>
       </SheetContent>
     </>

@@ -33,15 +33,19 @@ const SignInPage = () => {
       .min(8, "Password must be at least 8 characters"),
   });
 
-  const handleSubmit = async (value, action) => {
+  const handleSubmit = async (value) => {
     await loginFun(value);
 
   };
 
+  console.log(data?.data?.success);
+
   useEffect(() => {
-    if (data?.data?.success) {
-       nav("/home")
-     }
+    if (!data?.data?.success) {
+      nav("/");
+    } else if (data?.data?.success) {
+      nav("/home");
+    }
   },[data])
 
   return (

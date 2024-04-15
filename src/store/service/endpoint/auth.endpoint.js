@@ -16,11 +16,18 @@ const authEndpoint = apiService.injectEndpoints({
         body: arg,
       }),
     }),
-    profile:builder.query ({
+    profile: builder.query({
       query: () => "user-profile",
-    })
+    }),
+    logout: builder.mutation({
+      query: () => ({
+        url: `user-logout`,
+        method: "POST",
+      }),
+      invalidatesTags:['auth']
+    }),
   }),
 });
 
-export const {useSignInMutation, useSignUpMutation , useProfileQuery} = authEndpoint;
+export const {useSignInMutation, useSignUpMutation , useProfileQuery, useLogoutMutation} = authEndpoint;
 

@@ -13,6 +13,7 @@ export const apiService = createApi({
     }
 
   }),
+  tagTypes:['contact'],
   endpoints: () => ({})
 })
 
